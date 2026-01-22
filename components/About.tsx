@@ -1,9 +1,13 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Location } from './Globe3D';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Dynamically import Globe3D to avoid SSR issues with Three.js
 const Globe3D = dynamic(() => import('./Globe3D'), { ssr: false });
@@ -25,23 +29,64 @@ const journeySteps = [
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
+  const pinContainerRef = useRef<HTMLDivElement>(null);
   const [activeLocationIndex, setActiveLocationIndex] = useState(0);
   const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const handleLocationChange = useCallback((index: number, location: Location) => {
     setActiveLocationIndex(index);
     setCurrentLocation(location);
   }, []);
 
+  // GSAP ScrollTrigger pin - keeps section pinned until all locations are covered
+  useEffect(() => {
+    if (!sectionRef.current || !pinContainerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: '+=100px top',
+        end: '+=500%', // Pin for 3x viewport height of scrolling
+        pin: pinContainerRef.current,
+        pinSpacing: true,
+        scrub: true,
+        onUpdate: (self) => {
+          setScrollProgress(self.progress);
+          // Calculate which location to show based on scroll progress
+          // 5 locations, so divide progress into 5 segments
+          const newIndex = Math.min(Math.floor(self.progress * 5), 4);
+          if (newIndex !== activeLocationIndex) {
+            setActiveLocationIndex(newIndex);
+          }
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, [activeLocationIndex]);
+
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="relative min-h-[200vh] bg-[var(--card-bg)] transition-colors duration-300"
+      className="relative bg-[var(--card-bg)] transition-colors duration-300 overflow-visible"
     >
-      {/* Sticky container for the globe and content */}
-      <div className="sticky top-0 min-h-screen flex items-center py-20">
-        <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16">
+      {/* Pinned container for the globe and content */}
+      <div ref={pinContainerRef} className="min-h-screen flex items-center py-20 overflow-visible">
+        {/* Scroll Progress Indicator */}
+        <div className="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-center gap-2">
+          <div className="h-32 w-1 bg-[var(--border)] rounded-full overflow-hidden">
+            <motion.div 
+              className="w-full bg-[#ff6b00] rounded-full origin-top"
+              style={{ height: `${scrollProgress * 100}%` }}
+            />
+          </div>
+          <span className="text-xs text-[var(--muted)] font-medium">
+            {activeLocationIndex + 1}/{journeySteps.length}
+          </span>
+        </div>
+        <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16 overflow-visible">
           {/* Section Title */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -70,16 +115,16 @@ export default function About() {
           </motion.div>
 
           {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center overflow-visible">
             {/* Globe Column */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative aspect-square max-w-[500px] mx-auto lg:mx-0 w-full"
+              className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-visible"
             >
-              <Globe3D sectionRef={sectionRef} onLocationChange={handleLocationChange} />
+              <Globe3D sectionRef={sectionRef} onLocationChange={handleLocationChange} activeIndex={activeLocationIndex} />
 
               {/* Current Location Label */}
               <motion.div

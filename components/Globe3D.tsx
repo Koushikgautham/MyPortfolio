@@ -277,14 +277,19 @@ function Scene({ activeIndex }: { activeIndex: number }) {
 interface Globe3DProps {
   sectionRef: React.RefObject<HTMLElement | null>;
   onLocationChange?: (index: number, location: Location) => void;
+  activeIndex?: number; // Controlled by parent component
 }
 
-export default function Globe3D({ sectionRef, onLocationChange }: Globe3DProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+export default function Globe3D({ sectionRef, onLocationChange, activeIndex: controlledIndex }: Globe3DProps) {
+  const [internalIndex, setInternalIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Use controlled index if provided, otherwise use internal state
+  const activeIndex = controlledIndex ?? internalIndex;
 
+  // Only set up ScrollTrigger if not controlled externally
   useEffect(() => {
-    if (!sectionRef.current) return;
+    if (controlledIndex !== undefined || !sectionRef.current) return;
 
     const trigger = ScrollTrigger.create({
       trigger: sectionRef.current,
@@ -294,8 +299,8 @@ export default function Globe3D({ sectionRef, onLocationChange }: Globe3DProps) 
       onUpdate: (self) => {
         const progress = self.progress;
         const newIndex = Math.min(Math.floor(progress * 5), 4);
-        if (newIndex !== activeIndex) {
-          setActiveIndex(newIndex);
+        if (newIndex !== internalIndex) {
+          setInternalIndex(newIndex);
           onLocationChange?.(newIndex, locations[newIndex]);
         }
       },
@@ -304,13 +309,13 @@ export default function Globe3D({ sectionRef, onLocationChange }: Globe3DProps) 
     return () => {
       trigger.kill();
     };
-  }, [sectionRef, activeIndex, onLocationChange]);
+  }, [sectionRef, internalIndex, onLocationChange, controlledIndex]);
 
   return (
-    <div ref={containerRef} className="w-full h-full min-h-[300px] md:min-h-[400px] lg:min-h-[500px]">
+    <div ref={containerRef} className="w-full h-full overflow-visible">
       <Canvas
         camera={{ position: [0, 0, 2.8], fov: 45 }}
-        style={{ background: 'transparent' }}
+        style={{ background: 'transparent', overflow: 'visible' }}
         gl={{ alpha: true, antialias: true }}
       >
         <Scene activeIndex={activeIndex} />
