@@ -123,7 +123,7 @@ export default function Hero() {
       >
         <div className="w-px h-16 lg:h-20 bg-[var(--border)]" />
         <span className="text-[10px] lg:text-xs font-medium tracking-widest text-[var(--muted)] vertical-text">
-          2024
+          2026
         </span>
         <div className="w-px h-16 lg:h-20 bg-[var(--border)]" />
       </motion.div>
@@ -244,7 +244,7 @@ export default function Hero() {
         </h1>
 
         {/* Description and CTA Row */}
-        <div className="flex flex-col gap-6 sm:gap-8 mt-6 sm:mt-12 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-6 sm:gap-8 mt-6 sm:mt-12 lg:flex-row lg:items-end lg:justify-start">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

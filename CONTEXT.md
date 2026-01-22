@@ -192,7 +192,7 @@ Uses the View Transitions API for a smooth circular reveal effect:
 ```
 components/
 ├── Navbar.tsx          # Fixed navigation with mobile menu + theme toggle
-├── Hero.tsx            # Landing section with animations + PixelBlast background
+├── Hero.tsx            # Landing section with animations + PixelBlast
 ├── LogoMarquee.tsx     # Tech stack scrolling banner
 ├── ThemeToggle.tsx     # ✅ Dark/light mode toggle button
 ├── PixelBlast.tsx      # ✅ Three.js interactive pixel background effect
