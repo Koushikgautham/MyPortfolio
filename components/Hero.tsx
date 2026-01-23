@@ -4,12 +4,13 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import dynamic from 'next/dynamic';
 
 // Dynamically import PixelBlast to avoid SSR issues with Three.js
 const PixelBlast = dynamic(() => import('./PixelBlast'), { ssr: false });
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -64,7 +65,7 @@ export default function Hero() {
             trigger: sectionRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1,
+            scrub: 0.5,
           },
         });
       }
@@ -89,12 +90,12 @@ export default function Hero() {
           pixelSize={3}
           color="#ff6b00"
           patternScale={2.5}
-          patternDensity={0.85}
+          patternDensity={0.7}
           enableRipples={true}
-          rippleIntensityScale={1.5}
+          rippleIntensityScale={1.2}
           rippleThickness={0.12}
-          rippleSpeed={0.35}
-          speed={0.25}
+          rippleSpeed={0.3}
+          speed={0.2}
           edgeFade={0.15}
           transparent={true}
         />
@@ -201,7 +202,11 @@ export default function Hero() {
           </span>
           <span className="text-xs sm:text-sm text-[var(--muted)]">•</span>
           <span className="text-xs sm:text-sm font-medium tracking-wider text-[var(--muted)] uppercase">
-            Creative
+            Automation Engineer
+          </span>
+          <span className="text-xs sm:text-sm text-[var(--muted)]">•</span>
+          <span className="text-xs sm:text-sm font-medium tracking-wider text-[var(--muted)] uppercase">
+            Agent Builder
           </span>
         </motion.div>
 
@@ -259,7 +264,11 @@ export default function Hero() {
             href="#projects"
             onClick={(e) => {
               e.preventDefault();
-              document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
+              gsap.to(window, {
+                duration: 1,
+                scrollTo: { y: '#projects', offsetY: 80 },
+                ease: 'power2.inOut',
+              });
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
