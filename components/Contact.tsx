@@ -59,7 +59,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative py-16 sm:py-20 md:py-24 lg:py-32 bg-white dark:bg-black transition-colors duration-300"
+      className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-white dark:bg-black transition-colors duration-300"
     >
       <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-16">
         {/* Section Header */}
@@ -209,28 +209,6 @@ export default function Contact() {
                 </div>
               </motion.a>
             </div>
-
-            {/* Availability Status */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.5 }}
-              className="p-4 sm:p-6 rounded-xl bg-gradient-to-r from-[#ff6b00]/10 to-[#ff6b00]/5 border border-[#ff6b00]/20"
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
-                <span className="text-sm sm:text-base font-medium text-[var(--foreground)]">
-                  Available for opportunities
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-[var(--muted)] pl-6">
-                Open to full-time roles, freelance projects, and collaborations.
-              </p>
-            </motion.div>
           </motion.div>
         </div>
 

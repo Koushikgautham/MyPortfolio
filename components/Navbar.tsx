@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
+import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+gsap.registerPlugin(ScrollToPlugin);
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -40,7 +44,11 @@ export default function Navbar() {
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      gsap.to(window, {
+        duration: 0.1,
+        scrollTo: { y: href, offsetY: 80 },
+        ease: 'power2.inOut',
+      });
     }
     setIsMobileMenuOpen(false);
   };
@@ -50,7 +58,7 @@ export default function Navbar() {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled || isMobileMenuOpen
             ? 'bg-[var(--background)]/95 backdrop-blur-md shadow-sm'
@@ -66,14 +74,14 @@ export default function Navbar() {
                 e.preventDefault();
                 scrollToSection('#home');
               }}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 sm:gap-3"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <div className="w-9 h-9 sm:w-10 sm:h-10 bg-[#ff6b00] flex items-center justify-center">
                 <span className="text-white font-bold text-lg sm:text-xl">K</span>
               </div>
-              <span className="font-bold text-lg sm:text-xl hidden sm:block text-[var(--foreground)]">Portfolio</span>
+              <span className="font-bold text-lg sm:text-xl text-[var(--foreground)]">Koushik Gautham</span>
             </motion.a>
 
             {/* Desktop Navigation */}
@@ -202,13 +210,19 @@ export default function Navbar() {
                 transition={{ delay: 0.4 }}
                 className="mt-auto pt-8 flex justify-center gap-4"
               >
-                {['GitHub', 'LinkedIn', 'Twitter'].map((name) => (
+                {[
+                  { name: 'GitHub', href: 'https://github.com/Koushikgautham' },
+                  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/koushikgautham/' },
+                  { name: 'Hexora', href: 'https://hexora.tech' },
+                ].map((social) => (
                   <a
-                    key={name}
-                    href="#"
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-sm text-[var(--muted)] hover:text-[#ff6b00] transition-colors"
                   >
-                    {name}
+                    {social.name}
                   </a>
                 ))}
               </motion.div>
