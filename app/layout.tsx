@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | Full Stack Developer",
+  title: "Portfolio | Automation & AI Engineer",
   description: "Crafting exceptional digital experiences — transforming creative ideas into powerful, scalable solutions.",
   keywords: ["developer", "portfolio", "full stack", "react", "next.js", "typescript"],
 };

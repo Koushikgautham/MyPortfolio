@@ -134,7 +134,7 @@ export default function Projects() {
                 </span>
                 {project.award && (
                   <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-[#ff6b00]/10 text-[#ff6b00] border border-[#ff6b00]/30">
-                    🏆 {project.award.includes('Winner') ? 'Winner' : project.award.includes('Research') ? 'Published' : 'Finalist'}
+                    🏆 {project.award.includes('Winner') ? 'Winner' : project.award.includes('Research') ? 'Published':'Finalist'}
                   </span>
                 )}
               </div>
