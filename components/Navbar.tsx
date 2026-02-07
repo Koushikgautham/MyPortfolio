@@ -46,7 +46,7 @@ export default function Navbar() {
     if (element) {
       gsap.to(window, {
         duration: 0.1,
-        scrollTo: { y: href, offsetY: 80 },
+        scrollTo: { y: href, offsetY: -30 },
         ease: 'power2.inOut',
       });
     }
