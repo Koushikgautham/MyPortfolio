@@ -8,7 +8,7 @@ interface Project {
   award?: string;
   techStack: string[];
   description: string[];
-  type: 'game' | 'app' | 'research' | 'ai';
+  type: 'game' | 'app' | 'research' | 'ai' | 'business';
 }
 
 const projects: Project[] = [
@@ -23,14 +23,24 @@ const projects: Project[] = [
     type: 'game',
   },
   {
-    title: 'Run Boy Run',
-    award: 'National Level e-Luminate 2024 Winner',
-    techStack: ['Unity', 'C#', 'Aseprite'],
+  title: 'Financial Advisor Automation System',
+    techStack: ['Next.js', 'n8n', 'Email API', 'Workflow Automation'],
     description: [
-      'Developed an award-winning 2D pixel platformer featuring original game mechanics, assets, and logic built in Unity.',
-      'Won the National Level e-Luminate 2024 Digital Design Competition for innovation and gameplay experience.',
+      'Developed an end-to-end automation system for a financial advisor to streamline order management and client communication.',
+      'Implemented automated email parsing to fetch and process orders, with intelligent tagging and dashboard integration for real-time tracking.',
+      'Built automated email response system that triggers when the advisor accepts orders, enhancing client response time and satisfaction.',
     ],
-    type: 'game',
+    type: 'business',
+  },
+  {
+    title: 'Smart Ordering System',
+    techStack: ['Vite.js', 'QR Code API', 'Real-time Database', 'Multi-tenant Architecture'],
+    description: [
+      'Building a comprehensive QR code-based restaurant ordering platform that eliminates the need for traditional waiter-based ordering.',
+      'Architected a three-component system: subscription website for onboarding, customer ordering interface, and restaurant management dashboard.',
+      'Implementing real-time order tracking and bill management features to provide seamless dining experiences for customers and operational efficiency for restaurants.',
+    ],
+    type: 'business',
   },
   {
     title: 'Marti – Mart for Artisans',
@@ -51,17 +61,7 @@ const projects: Project[] = [
       'Proposed a fixed-parameter model as a prompt filter, achieving a 20% reduction in LLM load and 90% decrease in adversarial inputs.',
     ],
     type: 'ai',
-  },
-  {
-    title: 'Blockchain-based P2E Game',
-    award: 'Research Paper',
-    techStack: ['Blockchain', 'Web3', 'Game Design'],
-    description: [
-      'Explored blockchain integration within gaming ecosystems to enable secure player-driven economies.',
-      'Identified potential for decentralized P2E models to improve earning opportunities for professional gamers.',
-    ],
-    type: 'research',
-  },
+  }
 ];
 
 const typeIcons: Record<Project['type'], string> = {
@@ -69,6 +69,7 @@ const typeIcons: Record<Project['type'], string> = {
   app: '📱',
   research: '📄',
   ai: '🤖',
+  business: '⚙️',
 };
 
 const typeLabels: Record<Project['type'], string> = {
@@ -76,6 +77,7 @@ const typeLabels: Record<Project['type'], string> = {
   app: 'Mobile App',
   research: 'Research',
   ai: 'AI/ML',
+  business: 'Business Automation',
 };
 
 export default function Projects() {
