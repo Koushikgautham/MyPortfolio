@@ -27,23 +27,29 @@ const supportsViewTransitions = () => {
 };
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
   const [mounted, setMounted] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transition, setTransition] = useState<TransitionState | null>(null);
 
-  // Load theme from localStorage on mount
+  // Load theme from localStorage on mount - dark is default
   useEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem('theme') as Theme | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
 
     if (savedTheme) {
       setTheme(savedTheme);
       if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
-    } else if (prefersDark) {
+    } else if (prefersLight) {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      // Default to dark
       setTheme('dark');
       document.documentElement.classList.add('dark');
     }

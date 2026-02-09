@@ -37,13 +37,13 @@ const experienceData: ExperienceCategory[] = [
     icon: 'work',
     companies: [
       {
-        id: 'hexora',
-        name: 'Hexora Digital Transformation Partners',
+        id: 'hexor',
+        name: 'Hexor Tech',
         isCurrent: true,
         experiences: [
           {
-            id: 'hexora-1',
-            title: 'AI & Full-Stack Developer',
+            id: 'hexor-1',
+            title: 'Automation Freelancing',
             type: 'Full-time',
             duration: '2025 — Current',
             location: 'Chennai, India',
