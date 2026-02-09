@@ -328,7 +328,6 @@ section {
 }
 
 /* View Transitions API - Circular theme transition */
-/* Keyframes are dynamically injected by ThemeContext with exact pixel coordinates */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.7s;
@@ -347,7 +346,7 @@ section {
   animation: theme-circle-expand 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Dark to Light - shrink old (dark) view toward button to reveal light */
+/* Dark to Light - Light expands from button (reverse z-index so we animate the OLD view shrinking) */
 .theme-transition-to-light::view-transition-old(root) {
   z-index: 9999;
   animation: theme-circle-shrink 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -356,4 +355,22 @@ section {
 .theme-transition-to-light::view-transition-new(root) {
   z-index: 1;
   animation: none;
+}
+
+@keyframes theme-circle-expand {
+  from {
+    clip-path: circle(0px at var(--theme-transition-x, 50vw) var(--theme-transition-y, 50vh));
+  }
+  to {
+    clip-path: circle(var(--theme-transition-radius, 200vmax) at var(--theme-transition-x, 50vw) var(--theme-transition-y, 50vh));
+  }
+}
+
+@keyframes theme-circle-shrink {
+  from {
+    clip-path: circle(var(--theme-transition-radius, 200vmax) at var(--theme-transition-x, 50vw) var(--theme-transition-y, 50vh));
+  }
+  to {
+    clip-path: circle(0px at var(--theme-transition-x, 50vw) var(--theme-transition-y, 50vh));
+  }
 }

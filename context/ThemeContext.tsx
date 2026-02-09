@@ -27,29 +27,23 @@ const supportsViewTransitions = () => {
 };
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark');
+  const [theme, setTheme] = useState<Theme>('light');
   const [mounted, setMounted] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [transition, setTransition] = useState<TransitionState | null>(null);
 
-  // Load theme from localStorage on mount - dark is default
+  // Load theme from localStorage on mount
   useEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem('theme') as Theme | null;
-    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (savedTheme) {
       setTheme(savedTheme);
       if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
       }
-    } else if (prefersLight) {
-      setTheme('light');
-      document.documentElement.classList.remove('dark');
-    } else {
-      // Default to dark
+    } else if (prefersDark) {
       setTheme('dark');
       document.documentElement.classList.add('dark');
     }
@@ -89,34 +83,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       Math.max(y, window.innerHeight - y)
     );
 
-    // Add class to indicate transition direction (for CSS z-index control)
+    // Set CSS custom properties for the animation origin
+    root.style.setProperty('--theme-transition-x', `${x}px`);
+    root.style.setProperty('--theme-transition-y', `${y}px`);
+    root.style.setProperty('--theme-transition-radius', `${maxRadius}px`);
+
+    // Add class to indicate transition direction (for CSS to use)
     root.classList.remove('theme-transition-to-dark', 'theme-transition-to-light');
     root.classList.add(newTheme === 'dark' ? 'theme-transition-to-dark' : 'theme-transition-to-light');
 
     // Check if View Transitions API is supported
     if (supportsViewTransitions()) {
       setIsTransitioning(true);
-
-      // Inject dynamic keyframes with exact pixel coordinates
-      // This avoids both CSS custom property inheritance issues and
-      // Web Animations API pseudoElement compatibility issues on mobile
-      const styleId = 'theme-transition-keyframes';
-      let styleEl = document.getElementById(styleId) as HTMLStyleElement | null;
-      if (!styleEl) {
-        styleEl = document.createElement('style');
-        styleEl.id = styleId;
-        document.head.appendChild(styleEl);
-      }
-      styleEl.textContent = `
-        @keyframes theme-circle-expand {
-          from { clip-path: circle(0px at ${x}px ${y}px); }
-          to { clip-path: circle(${maxRadius}px at ${x}px ${y}px); }
-        }
-        @keyframes theme-circle-shrink {
-          from { clip-path: circle(${maxRadius}px at ${x}px ${y}px); }
-          to { clip-path: circle(0px at ${x}px ${y}px); }
-        }
-      `;
 
       // Use View Transitions API
       const doc = document as Document & {
@@ -133,14 +111,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       viewTransition.finished.then(() => {
         setIsTransitioning(false);
         root.classList.remove('theme-transition-to-dark', 'theme-transition-to-light');
-        // Clean up dynamic keyframes
-        const el = document.getElementById(styleId);
-        if (el) el.remove();
       }).catch(() => {
         setIsTransitioning(false);
         root.classList.remove('theme-transition-to-dark', 'theme-transition-to-light');
-        const el = document.getElementById(styleId);
-        if (el) el.remove();
       });
     } else {
       // Fallback: Use manual overlay animation

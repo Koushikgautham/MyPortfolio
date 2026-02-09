@@ -27,22 +27,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Prevent flash of wrong theme - dark is default */}
+        {/* Prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   var theme = localStorage.getItem('theme');
-                  var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-                  if (theme === 'light' || (!theme && prefersLight)) {
-                    document.documentElement.classList.remove('dark');
-                  } else {
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (theme === 'dark' || (!theme && prefersDark)) {
                     document.documentElement.classList.add('dark');
                   }
-                } catch (e) {
-                  document.documentElement.classList.add('dark');
-                }
+                } catch (e) {}
               })();
             `,
           }}
