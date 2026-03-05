@@ -37,9 +37,30 @@ const experienceData: ExperienceCategory[] = [
     icon: 'work',
     companies: [
       {
+        id: 'Siemens',
+        name: 'Siemens',
+        isCurrent: true,
+        experiences: [
+          {
+            id: 'Siemens-1',
+            title: 'Internship - Automation & AI',
+            type: 'Full-time',
+            duration: '2026 — Current',
+            location: 'Chennai, India',
+            isCurrent: true,
+            description: [
+              'Line - 1 - project not confirmed yet',
+              'Line - 2 - project not confirmed yet',
+              'Line - 3 - project not confirmed yet',
+            ],
+            skills: ['Playwright Automation', 'Test Automation', 'Web Development', 'Azure Devops', 'AI Engineering', 'Cloud & DevOps'],
+          },
+        ],
+      },
+      {
         id: 'hexor',
         name: 'Hexor Tech',
-        isCurrent: true,
+        isCurrent: false,
         experiences: [
           {
             id: 'hexor-1',
@@ -47,7 +68,7 @@ const experienceData: ExperienceCategory[] = [
             type: 'Full-time',
             duration: '2025 — Current',
             location: 'Chennai, India',
-            isCurrent: true,
+            isCurrent: false,
             description: [
               'Developing scalable web and mobile applications with modern tech stacks',
               'Implementing AI/ML solutions and automation workflows using n8n',
