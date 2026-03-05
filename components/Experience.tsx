@@ -45,7 +45,7 @@ const experienceData: ExperienceCategory[] = [
             id: 'hexor-1',
             title: 'Automation Freelancing',
             type: 'Full-time',
-            duration: '2025 — Current',
+            duration: '2025 — 2026',
             location: 'Chennai, India',
             isCurrent: true,
             description: [
